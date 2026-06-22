@@ -35,5 +35,6 @@ Thumbs.db
 *.doc
 *.docx
 *.pdf
+*.pptx
 build_requirement_doc.py
 docx_render_check/

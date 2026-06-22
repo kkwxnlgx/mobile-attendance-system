@@ -7,6 +7,16 @@
 """
 import os
 
+from dotenv import load_dotenv
+
+# 启动时把 backend/.env 里的键值读进环境变量。
+# 用绝对路径定位，确保无论从哪个目录启动 uvicorn 都能找到这个文件。
+# 注意：os.getenv 已存在的真实环境变量优先级更高，不会被 .env 覆盖。
+_ENV_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"
+)
+load_dotenv(_ENV_PATH)
+
 # ---------------------------------------------------------------------------
 # 数据库
 # ---------------------------------------------------------------------------

@@ -1,0 +1,13 @@
+# 本地密钥与配置
+.env
+
+# 本地 SQLite 数据库文件
+*.db
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 虚拟环境
+.venv/
+venv/
