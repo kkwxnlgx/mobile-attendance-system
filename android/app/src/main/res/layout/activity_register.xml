@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <include layout="@layout/view_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView style="@style/FormLabel" android:text="学号" />
+            <EditText android:id="@+id/et_username" style="@style/FormInput"
+                android:hint="请输入学号" android:inputType="text" />
+
+            <TextView style="@style/FormLabel" android:text="姓名" />
+            <EditText android:id="@+id/et_name" style="@style/FormInput"
+                android:hint="请输入真实姓名" android:inputType="text" />
+
+            <TextView style="@style/FormLabel" android:text="手机号（可选）" />
+            <EditText android:id="@+id/et_phone" style="@style/FormInput"
+                android:hint="请输入手机号" android:inputType="phone" />
+
+            <TextView style="@style/FormLabel" android:text="密码" />
+            <EditText android:id="@+id/et_password" style="@style/FormInput"
+                android:hint="不少于6位" android:inputType="textPassword" />
+
+            <TextView style="@style/FormLabel" android:text="确认密码" />
+            <EditText android:id="@+id/et_password2" style="@style/FormInput"
+                android:hint="再次输入密码" android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/bg_button_primary"
+                android:text="注 册"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

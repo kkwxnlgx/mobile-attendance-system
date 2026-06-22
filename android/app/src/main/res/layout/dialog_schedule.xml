@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView style="@style/FormLabel" android:layout_marginTop="0dp" android:text="课程" />
+        <Spinner android:id="@+id/sp_course" android:layout_width="match_parent"
+            android:layout_height="48dp" android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input" android:paddingStart="12dp" android:paddingEnd="12dp" />
+
+        <TextView style="@style/FormLabel" android:text="班级" />
+        <Spinner android:id="@+id/sp_class" android:layout_width="match_parent"
+            android:layout_height="48dp" android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input" android:paddingStart="12dp" android:paddingEnd="12dp" />
+
+        <TextView style="@style/FormLabel" android:text="星期" />
+        <Spinner android:id="@+id/sp_weekday" android:layout_width="match_parent"
+            android:layout_height="48dp" android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input" android:paddingStart="12dp" android:paddingEnd="12dp" />
+
+        <TextView style="@style/FormLabel" android:text="开始时间" />
+        <TextView android:id="@+id/tv_start" style="@style/FormInput"
+            android:gravity="center_vertical" android:hint="点击选择，如 08:00" />
+
+        <TextView style="@style/FormLabel" android:text="结束时间" />
+        <TextView android:id="@+id/tv_end" style="@style/FormInput"
+            android:gravity="center_vertical" android:hint="点击选择，如 09:40" />
+
+        <TextView style="@style/FormLabel" android:text="上课地点" />
+        <EditText android:id="@+id/et_location" style="@style/FormInput"
+            android:hint="如 实训楼A301" android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="提示：新建课程表将使用演示考勤坐标，便于直接发起定位签到。"
+            android:textColor="#AEB6BD"
+            android:textSize="11sp" />
+    </LinearLayout>
+</ScrollView>

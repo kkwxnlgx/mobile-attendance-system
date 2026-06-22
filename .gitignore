@@ -1,0 +1,39 @@
+# ===== Python / FastAPI 后端 =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+# init_db 生成的 SQLite 库（可重建，不进版本库）
+backend/*.db
+backend/*.db-journal
+backend/tools/reset_log.txt
+# 运行日志
+*.log
+
+# ===== Android =====
+*.iml
+.gradle/
+build/
+.cxx/
+captures/
+# 本机 SDK 绝对路径，换机自动重建
+local.properties
+
+# ===== IDE =====
+.idea/
+*.iws
+
+# ===== 系统 / Office 临时文件 =====
+.DS_Store
+Thumbs.db
+~$*
+*.tmp
+
+# ===== 课程文档 / 文档生成产物（只传源码，全部排除）=====
+*.doc
+*.docx
+*.pdf
+build_requirement_doc.py
+docx_render_check/

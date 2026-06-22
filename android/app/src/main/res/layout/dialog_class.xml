@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText android:id="@+id/et_name" style="@style/FormInput"
+        android:layout_marginTop="0dp" android:hint="班级名称" android:inputType="text" />
+    <EditText android:id="@+id/et_grade" style="@style/FormInput"
+        android:layout_marginTop="12dp" android:hint="年级（如 2023级）" android:inputType="text" />
+    <EditText android:id="@+id/et_major" style="@style/FormInput"
+        android:layout_marginTop="12dp" android:hint="专业" android:inputType="text" />
+    <EditText android:id="@+id/et_remark" style="@style/FormInput"
+        android:layout_marginTop="12dp" android:hint="备注（可选）" android:inputType="text" />
+</LinearLayout>

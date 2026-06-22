@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <include layout="@layout/view_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView style="@style/FormLabel" android:text="请假类型" />
+            <Spinner
+                android:id="@+id/sp_type"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
+
+            <TextView style="@style/FormLabel" android:text="开始时间" />
+            <TextView
+                android:id="@+id/tv_start"
+                style="@style/FormInput"
+                android:gravity="center_vertical"
+                android:hint="点击选择开始时间" />
+
+            <TextView style="@style/FormLabel" android:text="结束时间" />
+            <TextView
+                android:id="@+id/tv_end"
+                style="@style/FormInput"
+                android:gravity="center_vertical"
+                android:hint="点击选择结束时间" />
+
+            <TextView style="@style/FormLabel" android:text="请假原因" />
+            <EditText
+                android:id="@+id/et_reason"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input"
+                android:gravity="top|start"
+                android:hint="请填写请假原因"
+                android:inputType="textMultiLine"
+                android:padding="12dp"
+                android:textColor="@color/text_primary"
+                android:textColorHint="#A6AEB6"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btn_submit"
+                style="@style/PrimaryButton"
+                android:layout_marginTop="28dp"
+                android:text="提交申请" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_launcher"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:theme="@style/AppTheme">
+
+        <activity android:name=".LoginActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".RegisterActivity" android:screenOrientation="portrait" />
+
+        <!-- 学生端 -->
+        <activity android:name=".student.StudentMainActivity" android:screenOrientation="portrait" />
+        <activity android:name=".student.CheckinActivity" android:screenOrientation="portrait" />
+        <activity android:name=".student.LeaveRequestActivity" android:screenOrientation="portrait" />
+        <activity android:name=".student.FixRequestActivity" android:screenOrientation="portrait" />
+        <activity android:name=".student.NotificationsActivity" android:screenOrientation="portrait" />
+
+        <!-- 教师端 -->
+        <activity android:name=".teacher.TeacherMainActivity" android:screenOrientation="portrait" />
+        <activity android:name=".teacher.LaunchAttendanceActivity" android:screenOrientation="portrait" />
+        <activity android:name=".teacher.MonitorActivity" android:screenOrientation="portrait" />
+        <activity android:name=".teacher.ClassManageActivity" android:screenOrientation="portrait" />
+        <activity android:name=".teacher.RosterActivity" android:screenOrientation="portrait" />
+        <activity android:name=".teacher.ScheduleManageActivity" android:screenOrientation="portrait" />
+        <activity android:name=".teacher.RecordsQueryActivity" android:screenOrientation="portrait" />
+
+        <!-- 管理员端 -->
+        <activity android:name=".admin.AdminMainActivity" android:screenOrientation="portrait" />
+        <activity android:name=".admin.UserManageActivity" android:screenOrientation="portrait" />
+        <activity android:name=".admin.StatsHostActivity" android:screenOrientation="portrait" />
+
+    </application>
+
+</manifest>

@@ -1,0 +1,12 @@
+# 统一文本文件换行为 LF（仓库内），避免跨平台行尾混乱
+* text=auto eol=lf
+
+# Windows 脚本保持 CRLF
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# 二进制文件不做换行转换
+*.jar binary
+*.png binary
+*.zip binary
+*.pdf binary

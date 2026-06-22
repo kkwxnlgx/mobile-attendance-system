@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <include layout="@layout/view_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tv_record_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_quick"
+                android:padding="14dp"
+                android:text="针对记录：课程 · 状态"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+
+            <TextView style="@style/FormLabel" android:text="补卡原因" />
+            <Spinner
+                android:id="@+id/sp_reason"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
+
+            <TextView style="@style/FormLabel" android:text="情况说明" />
+            <EditText
+                android:id="@+id/et_desc"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input"
+                android:gravity="top|start"
+                android:hint="请说明具体情况，便于教师审核"
+                android:inputType="textMultiLine"
+                android:padding="12dp"
+                android:textColor="@color/text_primary"
+                android:textColorHint="#A6AEB6"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btn_submit"
+                style="@style/PrimaryButton"
+                android:layout_marginTop="28dp"
+                android:text="提交补卡申请" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

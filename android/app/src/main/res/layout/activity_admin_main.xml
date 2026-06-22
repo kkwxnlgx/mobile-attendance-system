@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_header"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="28dp"
+        android:paddingBottom="28dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="系统管理后台"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="权限与数据维护"
+            android:textColor="#DCEDE7"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <TextView android:id="@+id/m_users" style="@style/MenuItem" android:text="用户管理（启用 / 禁用）" />
+    <TextView android:id="@+id/m_class" style="@style/MenuItem" android:text="班级管理" />
+    <TextView android:id="@+id/m_stats" style="@style/MenuItem" android:text="考勤统计" />
+    <TextView android:id="@+id/m_records" style="@style/MenuItem" android:text="考勤记录查询" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/bg_pill_unselected"
+        android:text="退出登录"
+        android:textColor="@color/status_absent"
+        android:textSize="15sp" />
+</LinearLayout>
