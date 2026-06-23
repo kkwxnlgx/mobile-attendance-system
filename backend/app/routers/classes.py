@@ -12,7 +12,8 @@ from ..security import require_role
 
 router = APIRouter(prefix="/api/classes", tags=["班级与名单"])
 
-manage = require_role(ROLE_TEACHER, ROLE_ADMIN)
+manage = require_role(ROLE_TEACHER, ROLE_ADMIN)   # 列表/名单：教师与管理员
+admin_only = require_role(ROLE_ADMIN)              # 班级基础数据增删改：仅管理员
 
 
 def _to_out(db: Session, c: Clazz) -> ClassOut:
@@ -29,7 +30,7 @@ def list_classes(db: Session = Depends(get_db), _=Depends(manage)):
 
 
 @router.post("", response_model=ClassOut, summary="新增班级")
-def create_class(data: ClassIn, db: Session = Depends(get_db), _=Depends(manage)):
+def create_class(data: ClassIn, db: Session = Depends(get_db), _=Depends(admin_only)):
     if db.query(Clazz).filter(Clazz.name == data.name).first():
         raise HTTPException(status_code=400, detail="班级名称已存在")
     c = Clazz(name=data.name, grade=data.grade, major=data.major, remark=data.remark, status=1)
@@ -40,7 +41,7 @@ def create_class(data: ClassIn, db: Session = Depends(get_db), _=Depends(manage)
 
 
 @router.put("/{class_id}", response_model=ClassOut, summary="编辑班级")
-def update_class(class_id: int, data: ClassIn, db: Session = Depends(get_db), _=Depends(manage)):
+def update_class(class_id: int, data: ClassIn, db: Session = Depends(get_db), _=Depends(admin_only)):
     c = db.query(Clazz).get(class_id)
     if c is None:
         raise HTTPException(status_code=404, detail="班级不存在")
@@ -54,7 +55,7 @@ def update_class(class_id: int, data: ClassIn, db: Session = Depends(get_db), _=
 
 
 @router.put("/{class_id}/status", response_model=ClassOut, summary="停用/启用班级")
-def toggle_class(class_id: int, db: Session = Depends(get_db), _=Depends(manage)):
+def toggle_class(class_id: int, db: Session = Depends(get_db), _=Depends(admin_only)):
     c = db.query(Clazz).get(class_id)
     if c is None:
         raise HTTPException(status_code=404, detail="班级不存在")
@@ -65,7 +66,7 @@ def toggle_class(class_id: int, db: Session = Depends(get_db), _=Depends(manage)
 
 
 @router.delete("/{class_id}", response_model=MessageOut, summary="删除班级")
-def delete_class(class_id: int, db: Session = Depends(get_db), _=Depends(manage)):
+def delete_class(class_id: int, db: Session = Depends(get_db), _=Depends(admin_only)):
     c = db.query(Clazz).get(class_id)
     if c is None:
         raise HTTPException(status_code=404, detail="班级不存在")

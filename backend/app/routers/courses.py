@@ -14,7 +14,8 @@ from ..security import get_current_user, require_role
 
 router = APIRouter(prefix="/api", tags=["课程与课程表"])
 
-manage = require_role(ROLE_TEACHER, ROLE_ADMIN)
+manage = require_role(ROLE_TEACHER, ROLE_ADMIN)   # 读取/排课：教师与管理员
+admin_only = require_role(ROLE_ADMIN)              # 课程基础数据增删改：仅管理员
 
 
 def _course_out(db: Session, c: Course) -> CourseOut:
@@ -46,9 +47,13 @@ def list_courses(db: Session = Depends(get_db), user: User = Depends(manage)):
 
 
 @router.post("/courses", response_model=CourseOut, summary="新增课程")
-def create_course(data: CourseIn, db: Session = Depends(get_db), user: User = Depends(manage)):
-    teacher_id = data.teacher_id or user.id
-    c = Course(name=data.name, teacher_id=teacher_id, semester=data.semester)
+def create_course(data: CourseIn, db: Session = Depends(get_db), _=Depends(admin_only)):
+    if not data.teacher_id:
+        raise HTTPException(status_code=400, detail="请指定授课教师")
+    teacher = db.query(User).filter(User.id == data.teacher_id, User.role == ROLE_TEACHER).first()
+    if teacher is None:
+        raise HTTPException(status_code=400, detail="授课教师不存在")
+    c = Course(name=data.name, teacher_id=data.teacher_id, semester=data.semester)
     db.add(c)
     db.commit()
     db.refresh(c)
@@ -56,15 +61,16 @@ def create_course(data: CourseIn, db: Session = Depends(get_db), user: User = De
 
 
 @router.put("/courses/{cid}", response_model=CourseOut, summary="编辑课程")
-def update_course(cid: int, data: CourseIn, db: Session = Depends(get_db), user: User = Depends(manage)):
+def update_course(cid: int, data: CourseIn, db: Session = Depends(get_db), _=Depends(admin_only)):
     c = db.query(Course).get(cid)
     if c is None:
         raise HTTPException(status_code=404, detail="课程不存在")
-    if user.role == ROLE_TEACHER and c.teacher_id != user.id:
-        raise HTTPException(status_code=403, detail="只能编辑自己的课程")
     c.name = data.name
     c.semester = data.semester
-    if user.role == ROLE_ADMIN and data.teacher_id:
+    if data.teacher_id:
+        teacher = db.query(User).filter(User.id == data.teacher_id, User.role == ROLE_TEACHER).first()
+        if teacher is None:
+            raise HTTPException(status_code=400, detail="授课教师不存在")
         c.teacher_id = data.teacher_id
     db.commit()
     db.refresh(c)
@@ -72,12 +78,10 @@ def update_course(cid: int, data: CourseIn, db: Session = Depends(get_db), user:
 
 
 @router.delete("/courses/{cid}", response_model=MessageOut, summary="删除课程")
-def delete_course(cid: int, db: Session = Depends(get_db), user: User = Depends(manage)):
+def delete_course(cid: int, db: Session = Depends(get_db), _=Depends(admin_only)):
     c = db.query(Course).get(cid)
     if c is None:
         raise HTTPException(status_code=404, detail="课程不存在")
-    if user.role == ROLE_TEACHER and c.teacher_id != user.id:
-        raise HTTPException(status_code=403, detail="只能删除自己的课程")
     # 关联保护：已有排课或考勤时拒绝硬删
     refs = db.query(Schedule).filter(Schedule.course_id == cid).count()
     refs += db.query(AttendanceTask).filter(AttendanceTask.course_id == cid).count()

@@ -27,8 +27,6 @@ public class TeacherManageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         ((TextView) v.findViewById(R.id.tv_name)).setText(SessionManager.name() + " 老师");
-        v.findViewById(R.id.m_class).setOnClickListener(x ->
-                startActivity(new Intent(getContext(), ClassManageActivity.class)));
         v.findViewById(R.id.m_schedule).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), ScheduleManageActivity.class)));
         v.findViewById(R.id.m_roster).setOnClickListener(x ->
