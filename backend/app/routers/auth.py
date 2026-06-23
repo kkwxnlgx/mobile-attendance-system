@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..models import ROLE_STUDENT, User
-from ..schemas import LoginIn, LoginOut, RegisterIn, UserOut
+from ..schemas import ChangePasswordIn, LoginIn, LoginOut, MessageOut, RegisterIn, UserOut
 from ..security import get_current_user, issue_token
 from ..utils import hash_password, verify_password
 
@@ -50,3 +50,13 @@ def login(data: LoginIn, db: Session = Depends(get_db)):
 @router.get("/me", response_model=UserOut, summary="当前用户信息")
 def me(user: User = Depends(get_current_user)):
     return user
+
+
+@router.post("/change-password", response_model=MessageOut, summary="修改密码")
+def change_password(data: ChangePasswordIn, db: Session = Depends(get_db),
+                    user: User = Depends(get_current_user)):
+    if not verify_password(data.old_password, user.password_hash):
+        raise HTTPException(status_code=400, detail="原密码不正确")
+    user.password_hash = hash_password(data.new_password)
+    db.commit()
+    return MessageOut(message="密码已修改")

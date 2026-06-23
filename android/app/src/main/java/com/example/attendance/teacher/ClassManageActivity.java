@@ -68,9 +68,10 @@ public class ClassManageActivity extends BaseActivity {
     private void showActions(Api.Clazz c) {
         new AlertDialog.Builder(this)
                 .setTitle(c.name)
-                .setItems(new String[]{"编辑", c.status == 1 ? "停用" : "启用"}, (d, which) -> {
+                .setItems(new String[]{"编辑", c.status == 1 ? "停用" : "启用", "删除"}, (d, which) -> {
                     if (which == 0) showForm(c);
-                    else toggle(c);
+                    else if (which == 1) toggle(c);
+                    else confirmDelete(c);
                 })
                 .show();
     }
@@ -80,6 +81,19 @@ public class ClassManageActivity extends BaseActivity {
             @Override public void onOk(Api.Clazz data) { load(); }
             @Override public void onErr(String message) { Ui.toast(ClassManageActivity.this, message); }
         });
+    }
+
+    private void confirmDelete(Api.Clazz c) {
+        new AlertDialog.Builder(this)
+                .setTitle("删除班级")
+                .setMessage("确认删除「" + c.name + "」？不可恢复。若班级下还有学生或排课/考勤将无法删除，请改用停用。")
+                .setNegativeButton("取消", null)
+                .setPositiveButton("删除", (d, w) ->
+                        ApiClient.api().deleteClass(c.id).enqueue(new ApiCallback<Api.Msg>() {
+                            @Override public void onOk(Api.Msg data) { Ui.toast(ClassManageActivity.this, "已删除"); load(); }
+                            @Override public void onErr(String message) { Ui.toast(ClassManageActivity.this, message); }
+                        }))
+                .show();
     }
 
     private void showForm(Api.Clazz existing) {

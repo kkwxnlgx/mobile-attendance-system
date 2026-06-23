@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <EditText android:id="@+id/et_name" style="@style/FormInput"
+            android:layout_marginTop="0dp" android:hint="课程名称" android:inputType="text" />
+        <EditText android:id="@+id/et_semester" style="@style/FormInput"
+            android:layout_marginTop="12dp" android:hint="学期（如 2025-2026-1）" android:inputType="text" />
+
+        <TextView style="@style/FormLabel" android:text="授课教师" />
+        <Spinner android:id="@+id/sp_teacher" android:layout_width="match_parent"
+            android:layout_height="48dp" android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input" android:paddingStart="12dp" android:paddingEnd="12dp" />
+    </LinearLayout>
+</ScrollView>

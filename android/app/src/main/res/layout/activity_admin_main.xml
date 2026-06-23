@@ -32,10 +32,12 @@
             android:textSize="13sp" />
     </LinearLayout>
 
-    <TextView android:id="@+id/m_users" style="@style/MenuItem" android:text="用户管理（启用 / 禁用）" />
+    <TextView android:id="@+id/m_users" style="@style/MenuItem" android:text="用户管理（新增 / 启用 / 禁用）" />
     <TextView android:id="@+id/m_class" style="@style/MenuItem" android:text="班级管理" />
+    <TextView android:id="@+id/m_course" style="@style/MenuItem" android:text="课程管理" />
     <TextView android:id="@+id/m_stats" style="@style/MenuItem" android:text="考勤统计" />
     <TextView android:id="@+id/m_records" style="@style/MenuItem" android:text="考勤记录查询" />
+    <TextView android:id="@+id/m_password" style="@style/MenuItem" android:text="修改密码" />
 
     <Button
         android:id="@+id/btn_logout"

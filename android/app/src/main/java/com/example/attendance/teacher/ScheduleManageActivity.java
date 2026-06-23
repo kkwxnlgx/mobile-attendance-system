@@ -50,6 +50,7 @@ public class ScheduleManageActivity extends BaseActivity {
         tvEmpty = findViewById(R.id.tv_empty);
         RecyclerView recycler = findViewById(R.id.recycler);
         adapter = new ScheduleAdapter();
+        adapter.setOnEdit(this::showForm);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setAdapter(adapter);
 
@@ -93,13 +94,19 @@ public class ScheduleManageActivity extends BaseActivity {
     private final String[] startTimeHolder = new String[1];
     private final String[] endTimeHolder = new String[1];
 
+    /** 「+ 新增」入口：以空表单创建。 */
     private void showForm() {
+        showForm(null);
+    }
+
+    /** editing 为 null 时新增，否则编辑该条课程表（预填后调用 update）。 */
+    private void showForm(final Api.Schedule editing) {
         if (courses.isEmpty() || classes.isEmpty()) {
             Ui.toast(this, "请先确保已有课程与班级");
             return;
         }
-        startTimeHolder[0] = null;
-        endTimeHolder[0] = null;
+        startTimeHolder[0] = editing == null ? null : editing.start_time;
+        endTimeHolder[0] = editing == null ? null : editing.end_time;
 
         View form = LayoutInflater.from(this).inflate(R.layout.dialog_schedule, null);
         Spinner spCourse = form.findViewById(R.id.sp_course);
@@ -120,6 +127,15 @@ public class ScheduleManageActivity extends BaseActivity {
         spWeekday.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
                 new String[]{"周一", "周二", "周三", "周四", "周五", "周六", "周日"}));
 
+        if (editing != null) {
+            spCourse.setSelection(indexOfCourse(editing.course_id));
+            spClass.setSelection(indexOfClass(editing.class_id));
+            if (editing.weekday >= 1 && editing.weekday <= 7) spWeekday.setSelection(editing.weekday - 1);
+            if (editing.start_time != null) tvStart.setText(Ui.hm(editing.start_time));
+            if (editing.end_time != null) tvEnd.setText(Ui.hm(editing.end_time));
+            etLocation.setText(editing.location == null ? "" : editing.location);
+        }
+
         tvStart.setOnClickListener(v -> DateTimePicker.pickTime(this, (hms, disp) -> {
             startTimeHolder[0] = hms;
             tvStart.setText(disp);
@@ -130,7 +146,7 @@ public class ScheduleManageActivity extends BaseActivity {
         }));
 
         new AlertDialog.Builder(this)
-                .setTitle("新增课程表")
+                .setTitle(editing == null ? "新增课程表" : "编辑课程表")
                 .setView(form)
                 .setNegativeButton("取消", null)
                 .setPositiveButton("保存", (d, w) -> {
@@ -150,17 +166,36 @@ public class ScheduleManageActivity extends BaseActivity {
                     body.put("start_time", startTimeHolder[0]);
                     body.put("end_time", endTimeHolder[0]);
                     body.put("location", location);
-                    body.put("latitude", DEMO_LAT);
-                    body.put("longitude", DEMO_LNG);
-                    body.put("weeks", "1-16");
-                    create(body);
+                    // 编辑时保留原有坐标与周次，新增时用演示坐标
+                    body.put("latitude", editing != null && editing.latitude != null ? editing.latitude : DEMO_LAT);
+                    body.put("longitude", editing != null && editing.longitude != null ? editing.longitude : DEMO_LNG);
+                    body.put("weeks", editing != null && editing.weeks != null ? editing.weeks : "1-16");
+                    if (editing == null) create(body);
+                    else update(editing.id, body);
                 })
                 .show();
+    }
+
+    private int indexOfCourse(long courseId) {
+        for (int i = 0; i < courses.size(); i++) if (courses.get(i).id == courseId) return i;
+        return 0;
+    }
+
+    private int indexOfClass(long classId) {
+        for (int i = 0; i < classes.size(); i++) if (classes.get(i).id == classId) return i;
+        return 0;
     }
 
     private void create(Map<String, Object> body) {
         ApiClient.api().createSchedule(body).enqueue(new ApiCallback<Api.Schedule>() {
             @Override public void onOk(Api.Schedule data) { Ui.toast(ScheduleManageActivity.this, "已新增"); load(); }
+            @Override public void onErr(String message) { Ui.toast(ScheduleManageActivity.this, message); }
+        });
+    }
+
+    private void update(long id, Map<String, Object> body) {
+        ApiClient.api().updateSchedule(id, body).enqueue(new ApiCallback<Api.Schedule>() {
+            @Override public void onOk(Api.Schedule data) { Ui.toast(ScheduleManageActivity.this, "已保存"); load(); }
             @Override public void onErr(String message) { Ui.toast(ScheduleManageActivity.this, message); }
         });
     }

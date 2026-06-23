@@ -10,24 +10,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendance.R;
 import com.example.attendance.model.Api;
-import com.example.attendance.ui.Ui;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.VH> {
+/** 课程列表适配器：复用 row_today_course，显示课程名 + 授课教师/学期。 */
+public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.VH> {
 
-    /** 点击某条课程表时回调，用于编辑。 */
-    public interface OnEdit { void onEdit(Api.Schedule schedule); }
+    public interface OnItemClick { void onClick(Api.Course course); }
 
-    private final List<Api.Schedule> items = new ArrayList<>();
-    private OnEdit onEdit;
+    private final List<Api.Course> items = new ArrayList<>();
+    private OnItemClick onItemClick;
 
-    public void setOnEdit(OnEdit listener) {
-        this.onEdit = listener;
+    public void setOnItemClick(OnItemClick l) {
+        this.onItemClick = l;
     }
 
-    public void setData(List<Api.Schedule> data) {
+    public void setData(List<Api.Course> data) {
         items.clear();
         if (data != null) items.addAll(data);
         notifyDataSetChanged();
@@ -42,13 +41,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.VH> {
 
     @Override
     public void onBindViewHolder(@NonNull VH h, int position) {
-        Api.Schedule s = items.get(position);
-        h.course.setText(s.course_name);
-        String info = (s.class_name == null ? "" : s.class_name) + "  "
-                + Ui.weekdayLabel(s.weekday) + " " + Ui.hm(s.start_time) + "-" + Ui.hm(s.end_time)
-                + "  " + (s.location == null ? "" : s.location);
-        h.info.setText(info);
-        h.itemView.setOnClickListener(v -> { if (onEdit != null) onEdit.onEdit(s); });
+        Api.Course c = items.get(position);
+        h.course.setText(c.name);
+        StringBuilder info = new StringBuilder();
+        if (c.teacher_name != null && !c.teacher_name.isEmpty()) info.append(c.teacher_name);
+        if (c.semester != null && !c.semester.isEmpty()) {
+            if (info.length() > 0) info.append("  ·  ");
+            info.append(c.semester);
+        }
+        h.info.setText(info.toString());
+        h.itemView.setOnClickListener(v -> { if (onItemClick != null) onItemClick.onClick(c); });
     }
 
     @Override

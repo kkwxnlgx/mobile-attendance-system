@@ -35,6 +35,8 @@ public class TeacherManageFragment extends Fragment {
                 startActivity(new Intent(getContext(), RosterActivity.class)));
         v.findViewById(R.id.m_records).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), RecordsQueryActivity.class)));
+        v.findViewById(R.id.m_password).setOnClickListener(x ->
+                startActivity(new Intent(getContext(), com.example.attendance.ChangePasswordActivity.class)));
         v.findViewById(R.id.btn_logout).setOnClickListener(x -> logout());
     }
 

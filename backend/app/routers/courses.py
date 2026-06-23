@@ -5,8 +5,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..models import ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER, Course, Schedule, User
-from ..schemas import CourseIn, CourseOut, ScheduleIn, ScheduleOut
+from ..models import (
+    ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER,
+    AttendanceTask, Course, Schedule, User,
+)
+from ..schemas import CourseIn, CourseOut, MessageOut, ScheduleIn, ScheduleOut
 from ..security import get_current_user, require_role
 
 router = APIRouter(prefix="/api", tags=["课程与课程表"])
@@ -50,6 +53,39 @@ def create_course(data: CourseIn, db: Session = Depends(get_db), user: User = De
     db.commit()
     db.refresh(c)
     return _course_out(db, c)
+
+
+@router.put("/courses/{cid}", response_model=CourseOut, summary="编辑课程")
+def update_course(cid: int, data: CourseIn, db: Session = Depends(get_db), user: User = Depends(manage)):
+    c = db.query(Course).get(cid)
+    if c is None:
+        raise HTTPException(status_code=404, detail="课程不存在")
+    if user.role == ROLE_TEACHER and c.teacher_id != user.id:
+        raise HTTPException(status_code=403, detail="只能编辑自己的课程")
+    c.name = data.name
+    c.semester = data.semester
+    if user.role == ROLE_ADMIN and data.teacher_id:
+        c.teacher_id = data.teacher_id
+    db.commit()
+    db.refresh(c)
+    return _course_out(db, c)
+
+
+@router.delete("/courses/{cid}", response_model=MessageOut, summary="删除课程")
+def delete_course(cid: int, db: Session = Depends(get_db), user: User = Depends(manage)):
+    c = db.query(Course).get(cid)
+    if c is None:
+        raise HTTPException(status_code=404, detail="课程不存在")
+    if user.role == ROLE_TEACHER and c.teacher_id != user.id:
+        raise HTTPException(status_code=403, detail="只能删除自己的课程")
+    # 关联保护：已有排课或考勤时拒绝硬删
+    refs = db.query(Schedule).filter(Schedule.course_id == cid).count()
+    refs += db.query(AttendanceTask).filter(AttendanceTask.course_id == cid).count()
+    if refs:
+        raise HTTPException(status_code=400, detail="该课程已有排课或考勤记录，无法删除")
+    db.delete(c)
+    db.commit()
+    return MessageOut(message="已删除")
 
 
 # ---- 课程表 ----

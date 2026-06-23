@@ -22,10 +22,14 @@ public class AdminMainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, UserManageActivity.class)));
         findViewById(R.id.m_class).setOnClickListener(v ->
                 startActivity(new Intent(this, ClassManageActivity.class)));
+        findViewById(R.id.m_course).setOnClickListener(v ->
+                startActivity(new Intent(this, CourseManageActivity.class)));
         findViewById(R.id.m_stats).setOnClickListener(v ->
                 startActivity(new Intent(this, StatsHostActivity.class)));
         findViewById(R.id.m_records).setOnClickListener(v ->
                 startActivity(new Intent(this, RecordsQueryActivity.class)));
+        findViewById(R.id.m_password).setOnClickListener(v ->
+                startActivity(new Intent(this, com.example.attendance.ChangePasswordActivity.class)));
         findViewById(R.id.btn_logout).setOnClickListener(v -> logout());
     }
 

@@ -3,7 +3,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..models import ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER, Clazz, User
+from ..models import (
+    ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER,
+    AttendanceTask, Clazz, Schedule, User,
+)
 from ..schemas import AddStudentIn, ClassIn, ClassOut, MessageOut, UserOut
 from ..security import require_role
 
@@ -59,6 +62,22 @@ def toggle_class(class_id: int, db: Session = Depends(get_db), _=Depends(manage)
     db.commit()
     db.refresh(c)
     return _to_out(db, c)
+
+
+@router.delete("/{class_id}", response_model=MessageOut, summary="删除班级")
+def delete_class(class_id: int, db: Session = Depends(get_db), _=Depends(manage)):
+    c = db.query(Clazz).get(class_id)
+    if c is None:
+        raise HTTPException(status_code=404, detail="班级不存在")
+    # 关联保护：仍有学生、排课或考勤时拒绝硬删
+    refs = db.query(User).filter(User.class_id == class_id).count()
+    refs += db.query(Schedule).filter(Schedule.class_id == class_id).count()
+    refs += db.query(AttendanceTask).filter(AttendanceTask.class_id == class_id).count()
+    if refs:
+        raise HTTPException(status_code=400, detail="该班级下还有学生或排课/考勤，无法删除，请先移出学生或改用停用")
+    db.delete(c)
+    db.commit()
+    return MessageOut(message="已删除")
 
 
 @router.get("/{class_id}/students", response_model=list[UserOut], summary="班级名单")

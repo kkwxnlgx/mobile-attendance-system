@@ -54,6 +54,8 @@ public class StudentProfileFragment extends Fragment {
         recyclerLeaves.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerLeaves.setAdapter(adapter);
 
+        v.findViewById(R.id.m_password).setOnClickListener(x ->
+                startActivity(new Intent(getContext(), com.example.attendance.ChangePasswordActivity.class)));
         v.findViewById(R.id.btn_logout).setOnClickListener(x -> logout());
     }
 

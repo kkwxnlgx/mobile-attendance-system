@@ -26,6 +26,7 @@
         </activity>
 
         <activity android:name=".RegisterActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ChangePasswordActivity" android:screenOrientation="portrait" />
 
         <!-- 学生端 -->
         <activity android:name=".student.StudentMainActivity" android:screenOrientation="portrait" />
@@ -46,6 +47,7 @@
         <!-- 管理员端 -->
         <activity android:name=".admin.AdminMainActivity" android:screenOrientation="portrait" />
         <activity android:name=".admin.UserManageActivity" android:screenOrientation="portrait" />
+        <activity android:name=".admin.CourseManageActivity" android:screenOrientation="portrait" />
         <activity android:name=".admin.StatsHostActivity" android:screenOrientation="portrait" />
 
     </application>

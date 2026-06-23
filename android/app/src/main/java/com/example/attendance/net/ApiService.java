@@ -27,6 +27,9 @@ public interface ApiService {
     @GET("api/auth/me")
     Call<Api.User> me();
 
+    @POST("api/auth/change-password")
+    Call<Api.Msg> changePassword(@Body Map<String, Object> body);
+
     // ---- 班级 / 名单 ----
     @GET("api/classes")
     Call<List<Api.Clazz>> listClasses();
@@ -39,6 +42,9 @@ public interface ApiService {
 
     @PUT("api/classes/{id}/status")
     Call<Api.Clazz> toggleClass(@Path("id") long id);
+
+    @DELETE("api/classes/{id}")
+    Call<Api.Msg> deleteClass(@Path("id") long id);
 
     @GET("api/classes/{id}/students")
     Call<List<Api.User>> roster(@Path("id") long id, @Query("keyword") String keyword);
@@ -55,6 +61,12 @@ public interface ApiService {
 
     @POST("api/courses")
     Call<Api.Course> createCourse(@Body Map<String, Object> body);
+
+    @PUT("api/courses/{id}")
+    Call<Api.Course> updateCourse(@Path("id") long id, @Body Map<String, Object> body);
+
+    @DELETE("api/courses/{id}")
+    Call<Api.Msg> deleteCourse(@Path("id") long id);
 
     @GET("api/schedules")
     Call<List<Api.Schedule>> listSchedules(@Query("class_id") Long classId);
@@ -138,6 +150,15 @@ public interface ApiService {
     // ---- 管理员 ----
     @GET("api/admin/users")
     Call<List<Api.User>> adminUsers(@Query("role") String role, @Query("keyword") String keyword);
+
+    @POST("api/admin/users")
+    Call<Api.User> createUser(@Body Map<String, Object> body);
+
+    @PUT("api/admin/users/{id}")
+    Call<Api.User> updateUser(@Path("id") long id, @Body Map<String, Object> body);
+
+    @DELETE("api/admin/users/{id}")
+    Call<Api.Msg> deleteUser(@Path("id") long id);
 
     @PUT("api/admin/users/{id}/status")
     Call<Api.User> toggleUser(@Path("id") long id);

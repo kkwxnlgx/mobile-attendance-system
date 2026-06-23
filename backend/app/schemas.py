@@ -22,6 +22,12 @@ class LoginIn(BaseModel):
     password: str
 
 
+class ChangePasswordIn(BaseModel):
+    """用户自助改密：校验原密码后更新。"""
+    old_password: str
+    new_password: str = Field(min_length=6, max_length=64)
+
+
 class LoginOut(BaseModel):
     token: str
     user_id: int
@@ -40,6 +46,23 @@ class UserOut(BaseModel):
     phone: Optional[str] = None
     class_id: Optional[int] = None
     status: int
+
+
+class AdminUserIn(BaseModel):
+    """管理员新增用户：仅限学生/教师。"""
+    username: str = Field(min_length=2, max_length=32)   # 学号/工号
+    name: str = Field(min_length=1, max_length=32)
+    password: str = Field(min_length=6, max_length=64)
+    role: str                                            # student / teacher
+    phone: Optional[str] = None
+    class_id: Optional[int] = None                       # 学生可选归属班级
+
+
+class AdminUserUpdateIn(BaseModel):
+    """管理员编辑用户：账号与角色不可改；password 留空表示不修改。"""
+    name: Optional[str] = Field(default=None, max_length=32)
+    phone: Optional[str] = None
+    password: Optional[str] = Field(default=None, min_length=6, max_length=64)
 
 
 # ---------------------------------------------------------------------------
